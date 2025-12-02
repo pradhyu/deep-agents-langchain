@@ -1,6 +1,7 @@
 """Logging middleware for capturing and displaying agent communications."""
 
 import json
+import logging
 from typing import Any
 from datetime import datetime
 
@@ -23,15 +24,17 @@ class LoggingMiddleware(BaseMiddleware):
         processed_request = middleware.process_request(request)
     """
     
-    def __init__(self, verbose: bool = True):
+    def __init__(self, verbose: bool = True, logger: logging.Logger = None):
         """
         Initialize the logging middleware.
         
         Args:
             verbose: If True, log detailed information including data content
+            logger: Optional logger instance (creates one if not provided)
         """
         super().__init__("LoggingMiddleware")
         self.verbose = verbose
+        self.logger = logger or logging.getLogger(__name__)
     
     def _format_data(self, data: Any, max_length: int = 200) -> str:
         """
@@ -61,8 +64,8 @@ class LoggingMiddleware(BaseMiddleware):
             message: The message to log
             level: Log level (INFO, DEBUG, etc.)
         """
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-        print(f"[{timestamp}] [{level}] [{self.name}] {message}")
+        log_method = getattr(self.logger, level.lower(), self.logger.info)
+        log_method(message)
     
     def process_request(self, request: AgentRequest) -> AgentRequest:
         """

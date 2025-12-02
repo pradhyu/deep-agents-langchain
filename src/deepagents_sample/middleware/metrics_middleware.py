@@ -1,6 +1,7 @@
 """Metrics middleware for tracking agent performance."""
 
 import time
+import logging
 from typing import Dict, List
 from datetime import datetime
 
@@ -26,13 +27,14 @@ class MetricsMiddleware(BaseMiddleware):
         metrics.print_summary()
     """
     
-    def __init__(self):
+    def __init__(self, logger: logging.Logger = None):
         """Initialize the metrics middleware with empty metric storage."""
         super().__init__("MetricsMiddleware")
         self.request_times: Dict[int, float] = {}  # request_id -> start_time
         self.agent_metrics: Dict[str, List[float]] = {}  # agent_name -> [durations]
         self.total_requests = 0
         self.total_responses = 0
+        self.logger = logger or logging.getLogger(__name__)
     
     def process_request(self, request: AgentRequest) -> AgentRequest:
         """
