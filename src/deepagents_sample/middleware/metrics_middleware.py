@@ -152,32 +152,32 @@ class MetricsMiddleware(BaseMiddleware):
         - Overall statistics
         - Performance insights
         """
-        print("\n" + "=" * 60)
-        print("METRICS SUMMARY")
-        print("=" * 60)
+        self.logger.info("=" * 60)
+        self.logger.info("METRICS SUMMARY")
+        self.logger.info("=" * 60)
         
         # Overall stats
         total_stats = self.get_total_stats()
-        print(f"\nOverall Statistics:")
-        print(f"  Total Requests:  {total_stats['total_requests']}")
-        print(f"  Total Responses: {total_stats['total_responses']}")
-        print(f"  Total Time:      {total_stats['total_time_ms']:.2f} ms")
-        print(f"  Average Time:    {total_stats['avg_time_ms']:.2f} ms")
+        self.logger.info("Overall Statistics:")
+        self.logger.info(f"  Total Requests:  {total_stats['total_requests']}")
+        self.logger.info(f"  Total Responses: {total_stats['total_responses']}")
+        self.logger.info(f"  Total Time:      {total_stats['total_time_ms']:.2f} ms")
+        self.logger.info(f"  Average Time:    {total_stats['avg_time_ms']:.2f} ms")
         
         # Per-agent stats
         if self.agent_metrics:
-            print(f"\nPer-Agent Statistics:")
+            self.logger.info("Per-Agent Statistics:")
             for agent_name in sorted(self.agent_metrics.keys()):
                 stats = self.get_agent_stats(agent_name)
                 if stats['count'] > 0:
-                    print(f"\n  {agent_name}:")
-                    print(f"    Calls:   {stats['count']}")
-                    print(f"    Min:     {stats['min_ms']:.2f} ms")
-                    print(f"    Max:     {stats['max_ms']:.2f} ms")
-                    print(f"    Average: {stats['avg_ms']:.2f} ms")
-                    print(f"    Total:   {stats['total_ms']:.2f} ms")
+                    self.logger.info(f"  {agent_name}:")
+                    self.logger.info(f"    Calls:   {stats['count']}")
+                    self.logger.info(f"    Min:     {stats['min_ms']:.2f} ms")
+                    self.logger.info(f"    Max:     {stats['max_ms']:.2f} ms")
+                    self.logger.info(f"    Average: {stats['avg_ms']:.2f} ms")
+                    self.logger.info(f"    Total:   {stats['total_ms']:.2f} ms")
         
-        print("\n" + "=" * 60 + "\n")
+        self.logger.info("=" * 60)
     
     def reset(self):
         """Reset all metrics to initial state."""
