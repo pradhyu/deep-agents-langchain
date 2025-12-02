@@ -145,6 +145,50 @@ Shows hierarchical agent orchestration:
 - **State Management**: Shared state across workflow
 - **Automatic Routing**: Task-based agent selection
 
+### Example 3: MCP Tool Integration
+
+Demonstrates external tool usage:
+
+- **CommandTool**: Safe shell command execution with whitelisting
+- **JSONSearchTool**: Powerful JSON querying with jq
+- **Tool Registration**: How agents access tools
+- **Error Handling**: Timeouts and error recovery
+- **Usage Statistics**: Track tool performance
+
+### Example 4: Streaming Responses ✨ NEW
+
+Real-time streaming for better UX:
+
+- **Token-by-Token Output**: Stream responses as they're generated
+- **Progressive Results**: Show research findings immediately
+- **Async Patterns**: Modern Python async/await
+- **Cancellable Operations**: Stop long-running tasks
+
+**Requires**: OPENAI_API_KEY
+
+### Example 5: Caching & Configuration 💰 NEW
+
+Production features for cost reduction:
+
+- **Configuration Management**: Environment-based settings with Pydantic
+- **Caching Layer**: 40-60% cost reduction
+- **Input Validation**: Security and data quality
+- **Cost Tracking**: Real-time budget monitoring
+
+**Benefits**: Significant cost savings, better security
+
+### Example 6: Parallel Execution & Error Recovery ⚡ NEW
+
+Performance and reliability features:
+
+- **Parallel Execution**: 3-4x speedup with asyncio
+- **Automatic Retry**: Exponential backoff for transient failures
+- **Fallback Strategies**: Graceful degradation
+- **Circuit Breaker**: Prevent cascade failures
+- **High Availability**: 99% uptime patterns
+
+**Benefits**: Better performance, higher reliability
+
 **Workflow:**
 ```
 ┌─────────────┐

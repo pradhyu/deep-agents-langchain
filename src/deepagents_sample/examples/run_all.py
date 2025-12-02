@@ -42,7 +42,24 @@ def print_menu():
     print("     - JSONSearchTool with jq")
     print("     - Agent tool usage patterns")
     print()
-    print("  4. Run All Examples")
+    print("  4. Streaming Responses (NEW)")
+    print("     - Real-time token-by-token output")
+    print("     - Progressive research results")
+    print("     - Requires: OPENAI_API_KEY")
+    print()
+    print("  5. Caching & Configuration (NEW)")
+    print("     - Configuration management")
+    print("     - Caching layer for cost reduction")
+    print("     - Input validation")
+    print("     - Cost tracking")
+    print()
+    print("  6. Parallel Execution & Error Recovery (NEW)")
+    print("     - Parallel agent execution")
+    print("     - Automatic retry logic")
+    print("     - Fallback strategies")
+    print("     - Circuit breaker pattern")
+    print()
+    print("  7. Run All Examples")
     print()
     print("  0. Exit")
     print()
@@ -58,9 +75,9 @@ def check_requirements(example_num: int) -> bool:
     Returns:
         True if requirements are met
     """
-    if example_num == 2:
+    if example_num in [2, 4]:
         if not os.getenv("OPENAI_API_KEY"):
-            print("\n⚠️  Example 2 requires OPENAI_API_KEY environment variable.")
+            print(f"\n⚠️  Example {example_num} requires OPENAI_API_KEY environment variable.")
             print("Please set it and try again:")
             print("  export OPENAI_API_KEY='your-key-here'\n")
             return False
@@ -90,7 +107,7 @@ def run_example(example_num: int) -> bool:
     Run a specific example.
     
     Args:
-        example_num: Example number (1-3)
+        example_num: Example number (1-6)
         
     Returns:
         True if successful
@@ -108,6 +125,17 @@ def run_example(example_num: int) -> bool:
         elif example_num == 3:
             from .example3_mcp_tools import run_example
             run_example()
+        elif example_num == 4:
+            from .example4_streaming_responses import run_example
+            import asyncio
+            asyncio.run(run_example())
+        elif example_num == 5:
+            from .example5_caching_and_config import run_example
+            run_example()
+        elif example_num == 6:
+            from .example6_parallel_and_retry import run_example
+            import asyncio
+            asyncio.run(run_example())
         else:
             print(f"Invalid example number: {example_num}")
             return False
@@ -127,7 +155,7 @@ def run_example(example_num: int) -> bool:
 
 def run_all_examples():
     """Run all examples sequentially."""
-    examples = [1, 2, 3]
+    examples = [1, 2, 3, 4, 5, 6]
     
     print("\n" + "="*70)
     print("RUNNING ALL EXAMPLES")
@@ -173,7 +201,7 @@ def interactive_mode():
             elif choice == '4':
                 run_all_examples()
             
-            elif choice in ['1', '2', '3']:
+            elif choice in ['1', '2', '3', '4', '5', '6']:
                 example_num = int(choice)
                 run_example(example_num)
                 input("\nPress Enter to return to menu...")
@@ -213,7 +241,7 @@ def main():
             run_all_examples()
             return
         
-        elif arg in ['1', '2', '3']:
+        elif arg in ['1', '2', '3', '4', '5', '6']:
             print_banner()
             example_num = int(arg)
             run_example(example_num)
