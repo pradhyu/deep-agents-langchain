@@ -1,0 +1,57 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "role": "engineer",
+      "projects": ["project-a", "project-b"],
+      "skills": ["python", "javascript", "docker"]
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "email": "bob@example.com",
+      "role": "designer",
+      "projects": ["project-b", "project-c"],
+      "skills": ["figma", "sketch", "css"]
+    },
+    {
+      "id": 3,
+      "name": "Carol White",
+      "email": "carol@example.com",
+      "role": "manager",
+      "projects": ["project-a", "project-c"],
+      "skills": ["agile", "leadership", "communication"]
+    }
+  ],
+  "projects": [
+    {
+      "id": "project-a",
+      "name": "Web Platform",
+      "status": "active",
+      "budget": 150000,
+      "team_size": 5
+    },
+    {
+      "id": "project-b",
+      "name": "Mobile App",
+      "status": "planning",
+      "budget": 80000,
+      "team_size": 3
+    },
+    {
+      "id": "project-c",
+      "name": "Data Pipeline",
+      "status": "active",
+      "budget": 120000,
+      "team_size": 4
+    }
+  ],
+  "metrics": {
+    "total_users": 3,
+    "active_projects": 2,
+    "total_budget": 350000,
+    "average_team_size": 4
+  }
+}
