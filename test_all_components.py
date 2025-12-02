@@ -7,14 +7,22 @@ Tests all components to verify functionality.
 
 import sys
 import os
+import logging
 from pathlib import Path
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(levelname)s] %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 def print_section(title):
     """Print a formatted section header."""
-    print("\n" + "="*70)
-    print(f"  {title}")
-    print("="*70 + "\n")
+    logger.info("\n" + "="*70)
+    logger.info(f"  {title}")
+    logger.info("="*70 + "\n")
 
 
 def test_imports():

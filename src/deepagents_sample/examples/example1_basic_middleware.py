@@ -11,6 +11,7 @@ agent requests and responses. It shows:
 """
 
 import os
+import logging
 from langchain_openai import ChatOpenAI
 
 from deepagents_sample.middleware import (
@@ -21,38 +22,46 @@ from deepagents_sample.middleware import (
     AgentResponse
 )
 from deepagents_sample.agents import CoordinatorAgent
+from deepagents_sample.utils import setup_logger
+
+# Set up logging
+logger = setup_logger("example1", level=logging.INFO)
 
 
 def run_example():
     """Run the basic middleware example."""
     
-    print("\n" + "="*70)
-    print("EXAMPLE 1: BASIC MIDDLEWARE USAGE")
-    print("="*70)
-    print("\nThis example demonstrates middleware interception of agent communications.")
-    print("Watch how LoggingMiddleware and MetricsMiddleware process each request/response.\n")
+    logger.info("="*70)
+    logger.info("EXAMPLE 1: BASIC MIDDLEWARE USAGE")
+    logger.info("="*70)
+    logger.info("This example demonstrates middleware interception of agent communications.")
+    logger.info("Watch how LoggingMiddleware and MetricsMiddleware process each request/response.")
     
     # Check for API key
     if not os.getenv("OPENAI_API_KEY"):
-        print("⚠️  OPENAI_API_KEY not set. Using mock mode.\n")
+        logger.warning("OPENAI_API_KEY not set. Using mock mode.")
         use_llm = False
     else:
         use_llm = True
     
     # Create middleware chain
-    print("Step 1: Creating middleware chain...")
-    print("  - Adding LoggingMiddleware (captures all communications)")
-    print("  - Adding MetricsMiddleware (tracks performance)\n")
+    logger.info("Step 1: Creating middleware chain...")
+    logger.info("  - Adding LoggingMiddleware (captures all communications)")
+    logger.info("  - Adding MetricsMiddleware (tracks performance)")
+    
+    # Create separate loggers for middleware
+    middleware_logger = setup_logger("middleware", level=logging.DEBUG)
+    metrics_logger = setup_logger("metrics", level=logging.INFO)
     
     middleware_chain = MiddlewareChain()
-    logging_middleware = LoggingMiddleware(verbose=True)
-    metrics_middleware = MetricsMiddleware()
+    logging_middleware = LoggingMiddleware(verbose=True, logger=middleware_logger)
+    metrics_middleware = MetricsMiddleware(logger=metrics_logger)
     
     middleware_chain.add(logging_middleware)
     middleware_chain.add(metrics_middleware)
     
     # Create agent with middleware
-    print("Step 2: Creating CoordinatorAgent with middleware...\n")
+    logger.info("Step 2: Creating CoordinatorAgent with middleware...")
     
     if use_llm:
         model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
@@ -66,11 +75,11 @@ def run_example():
         coordinator = None
     
     # Demonstrate middleware with manual requests/responses
-    print("Step 3: Demonstrating middleware interception...\n")
-    print("-" * 70)
+    logger.info("Step 3: Demonstrating middleware interception...")
+    logger.info("-" * 70)
     
     # Example 1: Simple request/response
-    print("\n[Example 1: Simple Task]\n")
+    logger.info("[Example 1: Simple Task]")
     
     request1 = AgentRequest(
         agent_name="coordinator",
@@ -91,7 +100,7 @@ def run_example():
     processed_response1 = middleware_chain.process_response(response1)
     
     # Example 2: Another request/response
-    print("\n[Example 2: Data Query]\n")
+    logger.info("[Example 2: Data Query]")
     
     request2 = AgentRequest(
         agent_name="coordinator",
@@ -112,35 +121,33 @@ def run_example():
     
     # Example 3: Using actual agent if LLM available
     if use_llm and coordinator:
-        print("\n[Example 3: Real Agent with Middleware]\n")
+        logger.info("[Example 3: Real Agent with Middleware]")
         
         result = coordinator.process("What is the capital of France?")
-        print(f"\nAgent Result: {result}\n")
+        logger.info(f"Agent Result: {result}")
     
     # Display metrics summary
-    print("\n" + "-" * 70)
-    print("\nStep 4: Displaying collected metrics...\n")
+    logger.info("-" * 70)
+    logger.info("Step 4: Displaying collected metrics...")
     metrics_middleware.print_summary()
     
     # Key takeaways
-    print("\n" + "="*70)
-    print("KEY TAKEAWAYS")
-    print("="*70)
-    print("""
-1. Middleware intercepts ALL agent communications
-2. LoggingMiddleware provides visibility into request/response flow
-3. MetricsMiddleware tracks timing and performance
-4. Multiple middleware can be chained together
-5. Middleware doesn't alter the core agent logic
-6. Each request/response pair is tracked with a unique ID
-
-Middleware is essential for:
-- Debugging agent interactions
-- Performance monitoring
-- Audit logging
-- Request/response transformation
-- Error tracking
-    """)
+    logger.info("="*70)
+    logger.info("KEY TAKEAWAYS")
+    logger.info("="*70)
+    logger.info("1. Middleware intercepts ALL agent communications")
+    logger.info("2. LoggingMiddleware provides visibility into request/response flow")
+    logger.info("3. MetricsMiddleware tracks timing and performance")
+    logger.info("4. Multiple middleware can be chained together")
+    logger.info("5. Middleware doesn't alter the core agent logic")
+    logger.info("6. Each request/response pair is tracked with a unique ID")
+    logger.info("")
+    logger.info("Middleware is essential for:")
+    logger.info("- Debugging agent interactions")
+    logger.info("- Performance monitoring")
+    logger.info("- Audit logging")
+    logger.info("- Request/response transformation")
+    logger.info("- Error tracking")
 
 
 if __name__ == "__main__":
